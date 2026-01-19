@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentLab Tibetan Translation API</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            background: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        .header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 300;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            font-weight: 300;
+        }
+        h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 35px 0 15px 0;
+            color: #2c2c2c;
+        }
+        h3 {
+            font-size: 17px;
+            font-weight: 500;
+            margin: 20px 0 10px 0;
+            color: #3c3c3c;
+        }
+        p {
+            margin-bottom: 12px;
+            color: #4a4a4a;
+        }
+        .endpoint-box {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 16px;
+            margin: 20px 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .method {
+            display: inline-block;
+            background: #000;
+            color: #fff;
+            padding: 3px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 10px;
+            font-family: 'Courier New', monospace;
+        }
+        .url {
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            color: #0066cc;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #d73a49;
+            border: 1px solid #e8e8e8;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f8;
+            padding: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            border: 1px solid #1a1a1a;
+        }
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+        .param-table th {
+            background: #f8f8f8;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            border-bottom: 2px solid #e0e0e0;
+            color: #2c2c2c;
+        }
+        .param-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+        .param-table tr:last-child td {
+            border-bottom: none;
+        }
+        .param-name {
+            font-family: 'Courier New', monospace;
+            color: #0066cc;
+            font-weight: 500;
+        }
+        .required {
+            color: #d73a49;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .optional {
+            color: #6a737d;
+            font-size: 11px;
+        }
+        .response-box {
+            background: #f8f9fa;
+            border-left: 3px solid #0066cc;
+            padding: 14px;
+            margin: 15px 0;
+        }
+        .note {
+            background: #fff9e6;
+            border-left: 3px solid #ffc107;
+            padding: 12px 16px;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #888;
+            font-size: 13px;
+        }
+        .footer a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+            color: #4a4a4a;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+                font-size: 14px;
+            }
+            h1 {
+                font-size: 26px;
+            }
+            .subtitle {
+                font-size: 14px;
+            }
+            h2 {
+                font-size: 20px;
+                margin: 30px 0 12px 0;
+            }
+            h3 {
+                font-size: 16px;
+                margin: 18px 0 8px 0;
+            }
+            .endpoint-box {
+                padding: 12px;
+            }
+            .method {
+                font-size: 12px;
+                padding: 2px 8px;
+            }
+            .url {
+                font-size: 13px;
+                word-break: break-all;
+            }
+            pre {
+                padding: 12px;
+                font-size: 12px;
+            }
+            .param-table {
+                font-size: 13px;
+            }
+            .param-table th,
+            .param-table td {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            /* 表格在小屏幕上堆叠显示 */
+            .param-table thead {
+                display: none;
+            }
+            .param-table tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid #e0e0e0;
+                background: #fff;
+            }
+            .param-table td {
+                display: block;
+                text-align: left;
+                border: none;
+                padding: 8px 12px;
+            }
+            .param-table td:before {
+                content: attr(data-label);
+                font-weight: 600;
+                display: inline-block;
+                width: 80px;
+                color: #666;
+            }
+            .response-box {
+                padding: 12px;
+            }
+            .note {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+            .footer {
+                margin-top: 40px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px 12px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            pre {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AgentLab Tibetan Translation</h1>
+        <p class="subtitle">Tibetan-Chinese Neural Machine Translation API</p>
+    </div>
+
+    <h2>API Endpoint</h2>
+    <div class="endpoint-box">
+        <span class="method">POST</span>
+        <span class="url">/api/translate</span>
+    </div>
+
+    <h2>Request</h2>
+    <h3>Headers</h3>
+    <pre>Content-Type: application/json</pre>
+
+    <h3>Parameters</h3>
+    <table class="param-table">
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td data-label="Parameter"><span class="param-name">text</span></td>
+                <td data-label="Type">string</td>
+                <td data-label="Required"><span class="required">Required</span></td>
+                <td data-label="Description">Text to be translated</td>
+            </tr>
+            <tr>
+                <td data-label="Parameter"><span class="param-name">direction</span></td>
+                <td data-label="Type">string</td>
+                <td data-label="Required"><span class="optional">Optional</span></td>
+                <td data-label="Description">Translation direction: <code>tc</code> (Tibetan→Chinese) or <code>ct</code> (Chinese→Tibetan)<br>Default: <code>tc</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Example Request</h3>
+    <pre>curl -X POST https://your-domain.vercel.app/api/translate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "བཀྲ་ཤིས་བདེ་ལེགས།",
+    "direction": "tc"
+  }'</pre>
+
+    <h2>Response</h2>
+    <h3>Success Response (200 OK)</h3>
+    <div class="response-box">
+        <pre>{
+  "success": true,
+  "source": "བཀྲ་ཤིས་བདེ་ལེགས།",
+  "translation": "扎西德勒",
+  "direction": "tc",
+  "directionName": "藏文→中文"
+}</pre>
+    </div>
+
+    <h3>Error Response (4xx/5xx)</h3>
+    <div class="response-box">
+        <pre>{
+  "success": false,
+  "error": "Error message"
+}</pre>
+    </div>
+
+    <h2>Examples</h2>
+    
+    <h3>Tibetan to Chinese</h3>
+    <pre>// Request
+{
+  "text": "བཀྲ་ཤིས་བདེ་ལེགས།",
+  "direction": "tc"
+}
+
+// Response
+{
+  "success": true,
+  "translation": "扎西德勒"
+}</pre>
+
+    <h3>Chinese to Tibetan</h3>
+    <pre>// Request
+{
+  "text": "你好",
+  "direction": "ct"
+}
+
+// Response
+{
+  "success": true,
+  "translation": "ཁྱོད་བདེ་མོ།"
+}</pre>
+
+    <div class="note">
+        <strong>Note:</strong> This API is designed for educational and research purposes. Please use responsibly and avoid excessive requests.
+    </div>
+
+    <h2>Rate Limits</h2>
+    <p>This API is deployed on Vercel's free tier with the following limits:</p>
+    <ul style="margin-left: 20px; color: #4a4a4a;">
+        <li>100 GB bandwidth per month</li>
+        <li>10 second execution timeout</li>
+        <li>Recommended: Add rate limiting on client side</li>
+    </ul>
+
+    <div class="footer">
+        <p><strong>Acknowledgments</strong></p>
+        <p>Translation service powered by Tibet University's Sunshine Tibetan-Chinese Machine Translation System.</p>
+        <p style="margin-top: 20px;">© 2026 AgentLab</p>
+    </div>
+</body>
+</html>

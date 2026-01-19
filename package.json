@@ -1,0 +1,9 @@
+{
+  "name": "tibetan-translation-api",
+  "version": "1.0.0",
+  "description": "藏文翻译API - Vercel Serverless",
+  "type": "module",
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  }
+}

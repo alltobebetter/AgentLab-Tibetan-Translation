@@ -1,0 +1,9 @@
+node_modules
+.vercel
+.env
+.DS_Store
+
+# Python files (local development only)
+py/
+*.pyc
+__pycache__
